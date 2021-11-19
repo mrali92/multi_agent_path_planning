@@ -6,13 +6,13 @@ author: Ashwin Bose (@atb033)
 
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from matplotlib.patches import Circle
+from matplotlib.patches import Circle, Rectangle
 import numpy as np
 
 
-def plot_robot_and_obstacles(robot, obstacles, robot_radius, num_steps, sim_time, filename):
+def plot_robot_and_obstacles(robot, obstacles, barriers, robot_radius, num_steps, sim_time, filename):
     fig = plt.figure()
-    ax = fig.add_subplot(111, autoscale_on=False, xlim=(0, 10), ylim=(0, 10))
+    ax = fig.add_subplot(111, autoscale_on=False, xlim=(0, 20), ylim=(0, 20))
     ax.set_aspect('equal')
     ax.grid()
     line, = ax.plot([], [], '--r')
@@ -20,24 +20,37 @@ def plot_robot_and_obstacles(robot, obstacles, robot_radius, num_steps, sim_time
     robot_patch = Circle((robot[0, 0], robot[1, 0]),
                          robot_radius, facecolor='green', edgecolor='black')
     obstacle_list = []
+    barrier_list = []
+
     for obstacle in range(np.shape(obstacles)[2]):
         obstacle = Circle((0, 0), robot_radius,
                           facecolor='aqua', edgecolor='black')
         obstacle_list.append(obstacle)
 
+    for barrier in range(np.shape(barriers)[2]):
+        barrier = Rectangle((5,5), 2, 2, facecolor='red', edgecolor='black')
+        barrier_list.append(barrier)
+
     def init():
         ax.add_patch(robot_patch)
         for obstacle in obstacle_list:
             ax.add_patch(obstacle)
+
+        for barrier in barrier_list:
+            ax.add_patch(barrier)
+
         line.set_data([], [])
-        return [robot_patch] + [line] + obstacle_list
+        return [robot_patch] + [line] + obstacle_list + barrier_list
 
     def animate(i):
         robot_patch.center = (robot[0, i], robot[1, i])
         for j in range(len(obstacle_list)):
             obstacle_list[j].center = (obstacles[0, i, j], obstacles[1, i, j])
+
+        for j in range(len(barrier_list)):
+            barrier_list[j].center = (barriers[0, i, j], barriers[1, i, j])
         line.set_data(robot[0, :i], robot[1, :i])
-        return [robot_patch] + [line] + obstacle_list
+        return [robot_patch] + [line] + obstacle_list + barrier_list
 
     init()
     step = (sim_time / num_steps)
@@ -64,7 +77,7 @@ def plot_robot(robot, timestep, radius=1, is_obstacle=False):
     y = center[1]
     if is_obstacle:
         circle = plt.Circle((x, y), radius, color='aqua', ec='black')
-        plt.plot(robot[0, :timestep], robot[1, :timestep], '--r',)
+        plt.plot(robot[0, :timestep], robot[1, :timestep], '--r', )
     else:
         circle = plt.Circle((x, y), radius, color='green', ec='black')
         plt.plot(robot[0, :timestep], robot[1, :timestep], 'blue')

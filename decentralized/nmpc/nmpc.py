@@ -10,7 +10,7 @@ import numpy as np
 from scipy.optimize import minimize, Bounds
 import time
 
-SIM_TIME = 8.
+SIM_TIME = 20.
 TIMESTEP = 0.1
 NUMBER_OF_TIMESTEPS = int(SIM_TIME/TIMESTEP)
 ROBOT_RADIUS = 0.5
@@ -32,7 +32,7 @@ def simulate(filename):
     obstacles = create_obstacles(SIM_TIME, NUMBER_OF_TIMESTEPS)
 
     start = np.array([5, 5])
-    p_desired = np.array([5, 5])
+    p_desired = np.array([0, 0])
 
     robot_state = start
     robot_state_history = np.empty((4, NUMBER_OF_TIMESTEPS))

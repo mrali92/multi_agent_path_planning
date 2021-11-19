@@ -1,32 +1,42 @@
 import numpy as np
 
+
 def create_obstacles(sim_time, num_timesteps):
     # Obstacle 1
     v = -2
     p0 = np.array([5, 12])
-    obst = create_robot(p0, v, np.pi/2, sim_time,
-                        num_timesteps).reshape(4, num_timesteps, 1)
+    obst = create_robot(p0, v, np.pi / 2, sim_time, num_timesteps).reshape(4, num_timesteps, 1)
     obstacles = obst
     # Obstacle 2
     v = 2
     p0 = np.array([0, 5])
-    obst = create_robot(p0, v, 0, sim_time, num_timesteps).reshape(
-        4, num_timesteps, 1)
+    obst = create_robot(p0, v, 0, sim_time, num_timesteps).reshape(4, num_timesteps, 1)
     obstacles = np.dstack((obstacles, obst))
     # Obstacle 3
     v = 2
     p0 = np.array([10, 10])
-    obst = create_robot(p0, v, -np.pi * 3 / 4, sim_time, num_timesteps).reshape(4,
-                                                                                num_timesteps, 1)
+    obst = create_robot(p0, v, -np.pi * 3 / 4, sim_time, num_timesteps).reshape(4,num_timesteps, 1)
     obstacles = np.dstack((obstacles, obst))
     # Obstacle 4
     v = 2
     p0 = np.array([7.5, 2.5])
-    obst = create_robot(p0, v, np.pi * 3 / 4, sim_time, num_timesteps).reshape(4,
-                                                                               num_timesteps, 1)
+    obst = create_robot(p0, v, np.pi * 3 / 4, sim_time, num_timesteps).reshape(4,num_timesteps, 1)
     obstacles = np.dstack((obstacles, obst))
 
     return obstacles
+
+
+def create_barriers(sim_time, num_timesteps):
+    # Barrier 1
+    p0 = np.array([5, 2.5])
+    barr = create_robot(p0, 0, 0, sim_time, num_timesteps).reshape(4, num_timesteps, 1)
+    barriers = barr
+
+    # Barrier 2
+    p0 = np.array([2.5, 5])
+    barr = create_robot(p0, 0, 0, sim_time, num_timesteps).reshape(4, num_timesteps, 1)
+    barriers = np.dstack((barriers, barr))
+    return barriers
 
 
 def create_robot(p0, v, theta, sim_time, num_timesteps):
